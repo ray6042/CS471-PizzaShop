@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<title>Page Title</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/styleSheet.css') }}">
+
+<body>
+
+  <section class="login-page">
+    <header class="header-banner">
+      <div class="header-content">
+        <h1 class="header-text">Kettering University Pizza Shop</h1>
+      </div>
+    </header>
+
+    <main class="login-container">
+      <div class="chip">
+        <div class="chip-content">
+          <span class="chip-text">Sign In</span>
+        </div>
+      </div>
+
+      <form action="{{ url_for("login")}}" method="post">
+        <div class="input-group">
+          <label for="username" class="input-label">Username</label>
+          <input type="text" name="username" id="username" class="input-field" placeholder="Enter your username" aria-label="Username">
+        </div>
+
+        <div class="password-input-group">
+          <label for="password" class="input-label">Password</label>
+          <input type="password" name="password" id="password" class="password-input-field" placeholder="Enter your password"
+            aria-label="Password">
+        </div>
+
+        <center>
+          <button type="submit" class="btn signin-btn" name="do_login">
+            <div class="btn-content">
+              <span class="btn-text">Sign In</span>
+            </div>
+          </button>
+        </center>
+      </form>
+      
+
+      <button class="btn signup-btn" onclick="openSignupModal()">
+        <div class="btn-content">
+          <span class="btn-text">Sign Up</span>
+        </div>
+      </button>
+
+      <div class="chip-bottom">
+        <div class="chip-content">
+          <span class="chip-text">Find your Order</span>
+        </div>
+      </div>
+
+      <button class="btn find-order-btn" onclick="openTrackingModal()">
+        <div class="btn-content">
+          <span class="btn-text">Find your Order</span>
+        </div>
+      </button>
+    </main>
+  </section>
+
+  <!-- Modal for Sign Up -->
+  <div id="signupModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('signupModal')">&times;</span>
+      <h2>Create Account</h2>
+      <form id="sign-up">
+        <div class="input-group">
+          <label for="newUsername" class="input-label">Username</label>
+          <input type="text" id="newUsername" class="input-field" placeholder="Enter a username"
+            aria-label="New Username">
+        </div>
+        <div class="password-input-group">
+          <label for="newPassword" class="input-label">Password</label>
+          <input type="password" id="newPassword" class="password-input-field" placeholder="Enter a password"
+            aria-label="New Password">
+        </div>
+        <div class="password-input-group">
+          <label for="confirmPassword" class="input-label">Confirm Password</label>
+          <input type="password" id="confirmPassword" class="password-input-field" placeholder="Confirm your password"
+            aria-label="Confirm Password">
+        </div>
+        <center>
+          <button type="submit" class="btn">
+            <div class="btn-content">
+              <span class="btn-text">Create Account</span>
+            </div>
+          </button>
+        </center>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal for Tracking Order -->
+  <div id="trackingModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('trackingModal')">&times;</span>
+      <h2>Track Your Order</h2>
+      <form>
+        <div class="input-group">
+          <label for="trackingNumber" class="input-label">Tracking Number</label>
+          <input type="text" id="trackingNumber" class="input-field" placeholder="Enter your tracking number"
+            aria-label="Tracking Number">
+        </div>
+        <center>
+          <button type="submit" class="btn">
+            <div class="btn-content">
+              <span class="btn-text">Track Order</span>
+            </div>
+          </button>
+        </center>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Open the Sign Up modal
+    function openSignupModal() {
+      document.getElementById("signupModal").style.display = "block";
+    }
+
+    // Open the Tracking Order modal
+    function openTrackingModal() {
+      document.getElementById("trackingModal").style.display = "block";
+    }
+
+    // Close the modal
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = "none";
+    }
+
+    // Close the modal when clicking outside of it
+    window.onclick = function (event) {
+      const signupModal = document.getElementById("signupModal");
+      const trackingModal = document.getElementById("trackingModal");
+
+      if (event.target == signupModal) {
+        signupModal.style.display = "none";
+      } else if (event.target == trackingModal) {
+        trackingModal.style.display = "none";
+      }
+    }
+  </script>
+
+</body>
+
+</html>

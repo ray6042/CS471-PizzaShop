@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Tracking</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styleSheet.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1>Kettering University Pizza Shop</h1>
+    </div>
+
+    <div class="tracking-container">
+        <button class="track-order-btn">Track Your Order</button>
+        <div class="progress-bar">
+            <div class="progress"></div>
+            <div class="progress-indicator"></div>
+        </div>
+        <div class="order-status">
+            <p>Your Order is on its Way</p>
+        </div>
+        <div class="order-info">
+            <h3>Order Information</h3>
+            <p>1 X Large Pizza<br>Toppings</p>
+            <p>2 X Small Pizza<br>Toppings</p>
+        </div>
+    </div>
+</body>
+</html>

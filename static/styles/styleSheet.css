@@ -1,0 +1,422 @@
+/* General Body and Global Styles */
+body {
+    font-family: Manrope, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #1a1a1a;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* Header Styles */
+.header {
+    background-color: #0056d7;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    font-size: 24px;
+    border-radius: 8px;
+}
+
+/* Login Page Styles */
+.login-page {
+    background-color: #fff;
+    display: flex;
+    padding-bottom: 136px;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.header-content {
+    justify-content: center;
+    align-items: center;
+    background-color: #0056d7;
+    display: flex;
+    width: 100%;
+    padding: 16px 24px;
+    border-radius: 8px;
+}
+
+.header-title {
+    align-self: stretch;
+}
+
+.login-container {
+    border-radius: 30px;
+    background-color: #fff;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    align-self: center;
+    display: flex;
+    margin-top: -25px;
+    width: 350px;
+    max-width: 100%;
+    flex-direction: column;
+    align-items: center;
+    font-weight: 700;
+    padding: 25px 72px 126px;
+    border: 1px solid #000;
+}
+
+/* Input Fields and Buttons */
+.input-group, .password-input-group {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    color: #595959;
+}
+
+.input-label {
+    font-size: 16px;
+}
+
+.input-field, .password-input-field {
+    border-radius: 8px;
+    border: 2.5px solid #595959;
+    background-color: #fff;
+    margin-top: 4px;
+    width: 90%;
+    font-size: 20px;
+    padding: 12px;
+}
+
+.btn {
+    justify-content: center;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    font-size: 20px;
+    text-align: center;
+    align-items: center;
+    padding: 0;
+    border: none;
+    background: none;
+}
+
+.btn-content {
+    justify-content: center;
+    align-items: center;
+    background-color: #0056d7;
+    display: flex;
+    width: 100%;
+    padding: 16px 24px;
+    border-radius: 8px;
+    color: white;
+}
+
+.signin-btn, .signup-btn, .find-order-btn {
+    margin-top: 34px;
+    max-width: 100%;
+}
+
+/* Chip Styles */
+.chip, .chip-bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 20px;
+    text-align: center;
+    justify-content: start;
+}
+
+.chip-content {
+    justify-content: center;
+    align-items: center;
+    border-radius: 100px;
+    background-color: #f2f2f2;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 15px;
+}
+
+.chip-text {
+    align-self: stretch;
+}
+
+/* Menu and Order Summary Styles */
+.container {
+    display: flex;
+    padding: 20px;
+}
+
+.menu {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    flex: 3;
+}
+
+.menu-item {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+    text-align: center;
+}
+
+.menu-item img {
+    width: 100%;
+    height: auto;
+}
+
+.menu-item h3 {
+    margin: 10px 0;
+}
+
+.order-summary {
+    flex: 1;
+    margin-left: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.order-summary h3 {
+    margin-bottom: 20px;
+}
+
+.order-summary .order-item {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+}
+
+.order-summary button {
+    width: 100%;
+    padding: 10px;
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.order-summary button:hover {
+    background-color: #005bb5;
+}
+
+/* Checkout Form Styles */
+.checkout-form {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.checkout-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    background-color: #eee;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.checkout-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.checkout-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.checkout-form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.checkout-form button:hover {
+    background-color: #005bb5;
+}
+
+/* Tracking Page Styles */
+.tracking-container {
+    margin: 50px auto;
+    width: 90%;
+    max-width: 600px;
+}
+
+.track-order-btn {
+    background-color: #e0e0e0;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 20px;
+    cursor: pointer;
+    margin-bottom: 30px;
+}
+
+.progress-bar {
+    position: relative;
+    height: 5px;
+    background-color: #000;
+    margin: 30px 0;
+}
+
+.progress {
+    width: 50%;
+    height: 100%;
+    background-color: #0056d7;
+}
+
+.progress-indicator {
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 15px;
+    height: 15px;
+    background-color: white;
+    border: 3px solid #0056d7;
+    border-radius: 50%;
+}
+
+.order-status p {
+    font-size: 18px;
+    background-color: #e0e0e0;
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 20px;
+    margin: 20px 0;
+}
+
+.order-info {
+    background-color: #f2f2f2;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* Pizza Builder Styles */
+.builder-container {
+    background-color: white;
+    margin: 30px auto;
+    padding: 20px;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 20px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+}
+
+.section {
+    margin: 20px 0;
+}
+
+.section h2 {
+    background-color: #e0e0e0;
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.size-options button, .action-btn {
+    border: 2px solid #0056d7;
+    border-radius: 10px;
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 16px;
+    background-color: white;
+    color: #0056d7;
+    cursor: pointer;
+}
+
+.size-options button:hover, .action-btn:hover {
+    background-color: #0056d7;
+    color: white;
+}
+
+.options {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.options label {
+    display: block;
+    margin: 10px;
+    font-size: 16px;
+}
+
+input[type="radio"] {
+    margin-right: 10px;
+}
+
+.quantity-selector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.quantity-btn {
+    background-color: #0056d7;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    width: 50px;
+}
+
+.quantity-btn:hover {
+    background-color: #004bb5;
+}
+
+#quantity {
+    width: 50px;
+    text-align: center;
+    border: 2px solid #0056d7;
+    border-radius: 10px;
+    font-size: 20px;
+    margin: 0 10px;
+}
+/* Modal styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 400px;
+  border-radius: 10px;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizza Builder</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styleSheet.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1>Kettering University Pizza Shop</h1>
+    </div>
+
+    <div class="builder-container">
+        <div class="section">
+            <h2>Pizza Size</h2>
+            <div class="size-options">
+                <button>Small</button>
+                <button>Medium</button>
+                <button>Large</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Sauce and Cheese Options</h2>
+            <div class="options">
+                <label><input type="radio" name="sauce-cheese"> Pizza Sauce</label>
+                <label><input type="radio" name="sauce-cheese"> Mozzarella</label>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Meats</h2>
+            <div class="options">
+                <label><input type="radio" name="meats"> Radio text</label>
+                <label><input type="radio" name="meats"> Radio text</label>
+                <label><input type="radio" name="meats"> Radio text</label>
+                <label><input type="radio" name="meats"> Radio text</label>
+                <label><input type="radio" name="meats"> Radio text</label>
+                <label><input type="radio" name="meats"> Radio text</label>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Other Toppings</h2>
+            <div class="options">
+                <label><input type="radio" name="toppings"> Radio text</label>
+                <label><input type="radio" name="toppings"> Radio text</label>
+                <label><input type="radio" name="toppings"> Radio text</label>
+                <label><input type="radio" name="toppings"> Radio text</label>
+                <label><input type="radio" name="toppings"> Radio text</label>
+                <label><input type="radio" name="toppings"> Radio text</label>
+            </div>
+        </div>
+
+        <!-- Quantity Section -->
+        <div class="section">
+            <h2>Quantity</h2>
+            <div class="quantity-selector">
+                <button class="quantity-btn" onclick="decrementQuantity()">-</button>
+                <input type="text" id="quantity" value="1" readonly>
+                <button class="quantity-btn" onclick="incrementQuantity()">+</button>
+            </div>
+        </div>
+
+        <!-- Buttons Section -->
+        <div class="section buttons-section">
+            <button class="action-btn" onclick="location.href='StoreFront.html'">Back to Menu</button>
+            <button class="action-btn">Add to Cart</button>
+        </div>
+    </div>
+
+    <script>
+        function incrementQuantity() {
+            var quantityInput = document.getElementById('quantity');
+            var quantity = parseInt(quantityInput.value, 10);
+            quantityInput.value = quantity + 1;
+        }
+
+        function decrementQuantity() {
+            var quantityInput = document.getElementById('quantity');
+            var quantity = parseInt(quantityInput.value, 10);
+            if (quantity > 1) {
+                quantityInput.value = quantity - 1;
+            }
+        }
+    </script>
+</body>
+</html>
