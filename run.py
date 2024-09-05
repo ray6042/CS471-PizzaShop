@@ -40,5 +40,13 @@ def home():
 def builder():
     return render_template("PizzaBuilder.html")
 
+@app.route("/home/")
+def menu():
+    return render_template("StoreFront.html")
+@app.route("/home/", methods = ["POST"])
+def addCart():
+
+    return render_template("StoreFront.html")
+
 if __name__ == "__main__":
     app.run()

@@ -338,6 +338,10 @@ body {
     background-color: #0056d7;
     color: white;
 }
+.size-options button:focus, .action-btn:focus {
+    background-color: #0056d7;
+    color: white;
+}
 
 .options {
     display: flex;
