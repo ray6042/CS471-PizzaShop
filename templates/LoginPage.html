@@ -21,7 +21,7 @@
         </div>
       </div>
 
-      <form action="{{ url_for("login")}}" method="post">
+      <form action="{{ url_for('home')}}" method="post">
         <div class="input-group">
           <label for="username" class="input-label">Username</label>
           <input type="text" name="username" id="username" class="input-field" placeholder="Enter your username" aria-label="Username">
@@ -36,7 +36,8 @@
         <center>
           <button type="submit" class="btn signin-btn" name="do_login">
             <div class="btn-content">
-              <span class="btn-text">Sign In</span>
+              <span class="btn-text" >Sign In</span>
+                
             </div>
           </button>
         </center>

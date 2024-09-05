@@ -15,27 +15,30 @@ from pymongo.server_api import ServerApi
 from flask import Flask, render_template, request, jsonify
 import subprocess
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates', static_folder='static')
 
 @app.route("/")
 def index():
     return render_template("LoginPage.html")
 # Create a new client and connect to the server
-client = MongoClient('mongodb://localhost:27017/') 
-db = client['demo']
-collection = db['data']
+#client = MongoClient('mongodb://localhost:27017/') 
+#db = client['demo']
+#collection = db['data']
 
-@app.route("/login/", methods=["POST"])
-def login():
+@app.route("/home/", methods=["POST"])
+def home():
     login_data = {}
     login_data['username'] = request.form.get("username")
     login_data['password'] = request.form.get("password")
     
     #json_data = json.dumps(login_data)
 
-    collection.insert_one(login_data)
+    #collection.insert_one(login_data)
     
-    return "Data updated to MongoDB"
+    return render_template("StoreFront.html")
+@app.route("/builder/")
+def builder():
+    return render_template("PizzaBuilder.html")
 
 if __name__ == "__main__":
     app.run()
