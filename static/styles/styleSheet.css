@@ -177,6 +177,7 @@ body {
 .order-summary .order-item {
     border-bottom: 1px solid #ccc;
     padding: 10px 0;
+    white-space: pre-line;
 }
 
 .order-summary button {

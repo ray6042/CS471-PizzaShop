@@ -38,15 +38,30 @@ def home():
     return render_template("StoreFront.html")
 @app.route("/builder/")
 def builder():
+
     return render_template("PizzaBuilder.html")
 
 @app.route("/home/")
 def menu():
     return render_template("StoreFront.html")
-@app.route("/home/", methods = ["POST"])
+
+@app.route("/home/")
 def addCart():
 
     return render_template("StoreFront.html")
+@app.route('/data', methods=['GET','POST'])
+def data():
+    if request.method == 'POST':
+        # Handle POST request to update order
+        order = request.get_json()
+        if not order:
+            return jsonify({"status": "error", "message": "No data received"}), 400
+        global order_data
+        order_data = {"order": order}
+        return jsonify({"status": "success", "order": order}), 200
+
+    # For GET requests, return the existing order as JSON
+    return jsonify(order_data), 200  # This ensures Content-Type is application/json
 
 if __name__ == "__main__":
     app.run()

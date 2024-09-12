@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pizza Builder</title>
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styleSheet.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/styleSheet.css') }}">
 </head>
 <body>
     <div class="header">
@@ -15,45 +15,44 @@
         <div class="section">
             <h2>Pizza Size</h2>
             <div class="size-options">
-                <button>Small</button>
-                <button>Medium</button>
-                <button>Large</button>
+                <label><input type="radio" name="size" data-value="Small" onclick="updateOrder(this)"> Small</label>
+                <label><input type="radio" name="size" data-value="Medium" onclick="updateOrder(this)"> Medium</label>
+                <label><input type="radio" name="size" data-value="Large" onclick="updateOrder(this)"> Large</label>
             </div>
         </div>
 
         <div class="section">
             <h2>Sauce and Cheese Options</h2>
             <div class="options">
-                <label><input type="checkbox" name="sauce-cheese"> Pizza Sauce</label>
-                <label><input type="checkbox" name="sauce-cheese"> BBQ Sauce</label>
-                <label><input type="checkbox" name="sauce-cheese"> White Sauce</label>
-                <label><input type="checkbox" name="sauce-cheese"> Mozzarella</label>
+                <label><input type="checkbox" name="sauce-cheese" data-value="Pizza Sauce" onclick="updateOrder(this)"> Pizza Sauce</label>
+                <label><input type="checkbox" name="sauce-cheese" data-value="BBQ Sauce" onclick="updateOrder(this)"> BBQ Sauce</label>
+                <label><input type="checkbox" name="sauce-cheese" data-value="White Sauce" onclick="updateOrder(this)"> White Sauce</label>
+                <label><input type="checkbox" name="sauce-cheese" data-value="Mozzarella" onclick="updateOrder(this)"> Mozzarella</label>
             </div>
         </div>
 
         <div class="section">
             <h2>Meats</h2>
             <div class="options">
-                <label><input type="checkbox" name="meats"> Pepperoni</label>
-                <label><input type="checkbox" name="meats"> Bacon</label>
-                <label><input type="checkbox" name="meats"> Ham</label>
-                <label><input type="checkbox" name="meats"> Sausage</label>
-                <label><input type="checkbox" name="meats"> Chicken</label>
+                <label><input type="checkbox" name="meats" data-value="Pepperoni" onclick="updateOrder(this)"> Pepperoni</label>
+                <label><input type="checkbox" name="meats" data-value="Bacon" onclick="updateOrder(this)"> Bacon</label>
+                <label><input type="checkbox" name="meats" data-value="Ham" onclick="updateOrder(this)"> Ham</label>
+                <label><input type="checkbox" name="meats" data-value="Sausage" onclick="updateOrder(this)"> Sausage</label>
+                <label><input type="checkbox" name="meats" data-value="Chicken" onclick="updateOrder(this)"> Chicken</label>
             </div>
         </div>
 
         <div class="section">
             <h2>Other Toppings</h2>
             <div class="options">
-                <label><input type="checkbox" name="toppings"> Extra Cheese</label>
-                <label><input type="checkbox" name="toppings"> Banana Peppers</label>
-                <label><input type="checkbox" name="toppings"> Pineapple</label>
-                <label><input type="checkbox" name="toppings"> Red Onions</label>
-                <label><input type="checkbox" name="toppings"> Extra Meat</label>
+                <label><input type="checkbox" name="toppings" data-value="Extra Cheese" onclick="updateOrder(this)"> Extra Cheese</label>
+                <label><input type="checkbox" name="toppings" data-value="Banana Peppers" onclick="updateOrder(this)"> Banana Peppers</label>
+                <label><input type="checkbox" name="toppings" data-value="Pineapple" onclick="updateOrder(this)"> Pineapple</label>
+                <label><input type="checkbox" name="toppings" data-value="Red Onions" onclick="updateOrder(this)"> Red Onions</label>
+                <label><input type="checkbox" name="toppings" data-value="Extra Meat" onclick="updateOrder(this)"> Extra Meat</label>
             </div>
         </div>
 
-        <!-- Quantity Section -->
         <div class="section">
             <h2>Quantity</h2>
             <div class="quantity-selector">
@@ -63,31 +62,108 @@
             </div>
         </div>
 
-        <!-- Buttons Section -->
         <div class="section buttons-section">
             <form action ="{{ url_for('menu')}}">
-            <button class="action-btn">Back to Menu</button>
+            <button class="action-btn" id = 'action-btn'>Back to Menu</button>
         </form>
-        <form action ="{{ url_for('addCart')}}">
-            <button class="action-btn">Add to Cart</button>
-        </form>
+        <form action ="{{ url_for('menu')}}">
+        <div class="section buttons-section">
+            <button class="action-btn" id="submitOrderBtn">Submit Order</button>
         </div>
+    </form>
+        
     </div>
 
     <script>
-        function incrementQuantity() {
-            var quantityInput = document.getElementById('quantity');
-            var quantity = parseInt(quantityInput.value, 10);
-            quantityInput.value = quantity + 1;
+        // Initial empty order object
+        let order = {
+            size: null,
+            saucecheese: [],
+            meats: [],
+            toppings: [],
+            quantity: 1,
+            ordernum: generateOrderNumber()
+        };
+    
+        function generateOrderNumber() {
+        // Generate a random number (you can make it longer or more complex if needed)
+        return 'ORD-' + Math.floor(Math.random() * 1000000);
+    }
+        // Function to handle updates to the order object
+        function updateOrder(element) {
+            const value = element.getAttribute('data-value');
+            const type = element.name;  // Identify whether it's size, saucecheese, meats, or toppings
+    
+            // For radio buttons (size selection)
+            if (element.type === "radio" && type === "size") {
+                order.size = value;
+            }
+    
+            // For checkboxes (saucecheese, meats, and toppings)
+            else if (element.type === "checkbox") {
+                if (type === "sauce-cheese") {
+                    // If checked, add sauce/cheese to the array
+                    if (element.checked) {
+                        order.saucecheese.push(value);
+                    } else {
+                        // If unchecked, remove it from the array
+                        order.saucecheese = order.saucecheese.filter(item => item !== value);
+                    }
+                } else if (type === "meats") {
+                    // If checked, add meat to the array
+                    if (element.checked) {
+                        order.meats.push(value);
+                    } else {
+                        // If unchecked, remove it from the array
+                        order.meats = order.meats.filter(item => item !== value);
+                    }
+                } else if (type === "toppings") {
+                    // If checked, add topping to the array
+                    if (element.checked) {
+                        order.toppings.push(value);
+                    } else {
+                        // If unchecked, remove it from the array
+                        order.toppings = order.toppings.filter(item => item !== value);
+                    }
+                }
+            }
+    
+            // Update the displayed JSON in the <pre> tag
+            document.getElementById('jsonOutput').textContent = JSON.stringify(order, null, 2);
         }
-
+    
+        // Quantity update functions
+        function incrementQuantity() {
+            order.quantity++;
+            document.getElementById('quantity').value = order.quantity;
+        }
+    
         function decrementQuantity() {
-            var quantityInput = document.getElementById('quantity');
-            var quantity = parseInt(quantityInput.value, 10);
-            if (quantity > 1) {
-                quantityInput.value = quantity - 1;
+            if (order.quantity > 1) {
+                order.quantity--;
+                document.getElementById('quantity').value = order.quantity;
             }
         }
+    
+        // Submit the order to the backend
+        document.getElementById('submitOrderBtn').addEventListener('click', function() {
+            fetch('/data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(order)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Order successfully submitted:', data);
+                alert('Order submitted successfully!');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
     </script>
+    
 </body>
 </html>

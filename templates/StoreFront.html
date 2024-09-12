@@ -72,15 +72,48 @@
 
         <div class="order-summary">
             <h3>Your Order</h3>
+            
             <div class="order-item">
-                <p>Pizza Info Here</p>
+                <p id = "demo"></p>
                 <p>Pizza Info Here</p>
             </div>
+            
             <form action="/checkout">
     <button type="submit">Checkout</button>
 			</form>
         </div>
     </div>
-
+    <script>
+        fetch('/data')
+            .then(response => response.json())  // Parse the JSON response
+            .then(data => {
+                const display = document.getElementById("demo");
+    
+                // Assuming the data returned is an object where `order` holds the actual order details
+                const orderDetails = data.order;
+    
+                // Clear the innerHTML in case of multiple fetches
+                display.innerHTML = '';
+    
+                // Manually define the desired display order for the order object
+                const displayOrder = ['size', 'saucecheese', 'meats', 'toppings', 'quantity', 'ordernum'];
+    
+                // Loop through the array in the desired order and display each element
+                displayOrder.forEach(key => {
+                    const value = orderDetails[key];
+    
+                    if (Array.isArray(value)) {
+                        // If the value is an array, join the elements for display
+                        display.innerHTML += `<strong>${key}:</strong> ${value.join(', ')}<br>`;
+                    } else {
+                        // Otherwise, display the key-value pair directly
+                        display.innerHTML += `<strong>${key}:</strong> ${value}<br>`;
+                    }
+                });
+            })
+            
+            
+    </script>
+    
 </body>
 </html>
