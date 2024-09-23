@@ -45,10 +45,10 @@ def builder():
 def menu():
     return render_template("StoreFront.html")
 
-@app.route("/home/")
-def addCart():
+@app.route("/checkout/")
+def checkpit():
 
-    return render_template("StoreFront.html")
+    return render_template("Checkout.html")
 @app.route('/data', methods=['GET','POST'])
 def data():
     if request.method == 'POST':
@@ -62,6 +62,19 @@ def data():
 
     # For GET requests, return the existing order as JSON
     return jsonify(order_data), 200  # This ensures Content-Type is application/json
+@app.route('/info', methods=['GET','POST'])
+def info():
+    if request.method == 'POST':
+        # Handle POST request to update order
+        info = request.get_json()
+        if not info:
+            return jsonify({"status": "error", "message": "No data received"}), 400
+        global info_data
+        info_data = {"Info": info}
+        return jsonify({"status": "success", "Info": info}), 200
+
+    # For GET requests, return the existing order as JSON
+    return jsonify(info_data), 200  # This ensures Content-Type is application/json
 
 if __name__ == "__main__":
     app.run()

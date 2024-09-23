@@ -12,40 +12,107 @@
         Kettering University Pizza Shop
     </div>
 
-    <div class="container">
-        <form class="checkout-form">
+    <div class="checkout-form" >
             <h2>Personal Information</h2>
             <label for="first-name">First Name</label>
-            <input type="text" id="first-name" name="first-name" required>
+            <input type="text" id="first-name" name="first-name" data-value="firstName" required>
 
             <label for="last-name">Last Name</label>
-            <input type="text" id="last-name" name="last-name" required>
+            <input type="text" id="last-name" name="last-name" data-value="lastName" required>
 
             <label for="mobile-phone">Mobile Phone Number</label>
-            <input type="tel" id="mobile-phone" name="mobile-phone" required>
+            <input type="tel" id="mobile-phone" name="mobile-phone" data-value="phoneNumber" required>
 
             <label for="email">Email</label>
-            <input type="email" id="email" name="email" required>
+            <input type="email" id="email" name="email" data-value="email" required>
 
             <label for="address">Address</label>
-            <input type="text" id="address" name="address" required>
+            <input type="text" id="address" name="address" data-value="address" required>
 
             <h2>Payment Information</h2>
             <label for="card-number">Card Number</label>
-            <input type="text" id="card-number" name="card-number" required>
+            <input type="text" id="card-number" name="card-number" data-value="cardNum" required>
 
             <label for="name-on-card">Name On Card</label>
-            <input type="text" id="name-on-card" name="name-on-card" required>
+            <input type="text" id="name-on-card" name="name-on-card" data-value="expDate" required>
 
             <label for="expiration-date">Expiration Date</label>
-            <input type="text" id="expiration-date" name="expiration-date" required>
+            <input type="text" id="expiration-date" name="expiration-date" data-value="cvv" required>
 
             <label for="cvv">CVV</label>
-            <input type="text" id="cvv" name="cvv" required>
-
-            <button type="submit">Place Order</button>
-        </form>
+            <input type="text" id="cvv" name="cvv" data-value="firstName" required>
+            <form action ="{{ url_for('index')}}">
+            <button type="submit" id="submitInfoBtn">Place Order</button>
+            </form>
+            
+        
     </div>
-
+<script>
+    let Info = {
+            firstName: [],
+            lastName: [],
+            phoneNumber: [],
+            email: [],
+            address: [],
+            ordernum: [],
+            cardNum: [],
+            expDate: [],
+            cvv: [],
+            nameCard: []
+        };
+    document.getElementById('submitInfoBtn').addEventListener('click', function() {
+        const emailValue = document.getElementById("email").value.trim()
+        const firstNameValue = document.getElementById("first-name").value.trim()
+        const lastNameValue = document.getElementById("last-name").value.trim()
+        const addressValue = document.getElementById("address").value.trim()
+        const phoneNumberValue = document.getElementById("mobile-phone").value.trim()
+        const cardNumValue = document.getElementById("card-number").value.trim()
+        const expDateValue = document.getElementById("expiration-date").value.trim()
+        const cvvValue = document.getElementById("cvv").value.trim()
+        const nameCardValue = document.getElementById("name-on-card").value.trim()
+            if (emailValue != "" ){
+                Info.email.push(emailValue)
+            }
+            if (firstNameValue != "" ){
+                Info.firstName.push(firstNameValue)
+            }
+            if (lastNameValue != "" ){
+                Info.lastName.push(lastNameValue)
+            }
+            if (addressValue != "" ){
+                Info.address.push(addressValue)
+            }
+            if (phoneNumberValue != "" ){
+                Info.phoneNumber.push(phoneNumberValue)
+            }
+            if (cardNumValue != "" ){
+                Info.cardNum.push(cardNumValue)
+            }
+            if (expDateValue != "" ){
+                Info.expDate.push(expDateValue)
+            }
+            if (cvvValue != "" ){
+                Info.cvv.push(cvvValue)
+            }
+            if (nameCardValue != "" ){
+                Info.nameCard.push(nameCardValue)
+            }
+            fetch('/info', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(Info)
+            })
+            .then(response => response.json())
+            .then(info => {
+                console.log('Order successfully submitted:', info);
+                alert('Payment info submitted successfully!');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+</script>
 </body>
 </html>
