@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Tracking</title>
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styleSheet.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/styleSheet.css') }}">
 </head>
+
 <body>
     <div class="header">
         <h1>Kettering University Pizza Shop</h1>
@@ -18,13 +20,92 @@
             <div class="progress-indicator"></div>
         </div>
         <div class="order-status">
-            <p>Your Order is on its Way</p>
+            <p id="orderStatus"></p>
         </div>
         <div class="order-info">
             <h3>Order Information</h3>
-            <p>1 X Large Pizza<br>Toppings</p>
+            <p id="order"></p>
             <p>2 X Small Pizza<br>Toppings</p>
+
         </div>
     </div>
+    <script>
+        var progress = document.documentElement;
+        var progressBall = document.documentElement;
+        var i = 0;
+
+        function changeProgress() {
+            
+            i++;
+
+            switch (i) {
+                case 1:
+                    progress.style.setProperty('--progress', '0%');
+                    progressBall.style.setProperty('--progressBall', '0%');
+                    document.getElementById('orderStatus').innerText = "Your Order has been placed";
+                    break;
+                case 3:
+                    progress.style.setProperty('--progress', '33%');
+                    progressBall.style.setProperty('--progressBall', '33%');
+                    document.getElementById('orderStatus').innerText = "Your Order is being made";
+                    break;
+                case 5:
+                    progress.style.setProperty('--progress', '50%');
+                    progressBall.style.setProperty('--progressBall', '50%');
+                    document.getElementById('orderStatus').innerText = "Your Order is being pacakaged";
+                    break;
+                case 7:
+                    progress.style.setProperty('--progress', '70%');
+                    progressBall.style.setProperty('--progressBall', '70%');
+                    document.getElementById('orderStatus').innerText = "Your Order is on its way";
+                    break;
+                case 10:
+                    progress.style.setProperty('--progress', '100%');
+                    progressBall.style.setProperty('--progressBall', '100%');
+                    document.getElementById('orderStatus').innerText = "Your Order is ready";
+                    break;
+            }
+
+            // Stop the interval once i reaches 10
+            if (i >= 10) {
+                clearInterval(progressInterval);
+            }
+        }
+
+        // Call the function periodically to simulate progress
+        var progressInterval = setInterval(changeProgress, 1000);  // Update every 1 second
+        document.addEventListener("DOMContentLoaded", function () {
+            changeProgress();
+        })
+
+        fetch('/data')
+            .then(response => response.json())  // Parse the JSON response
+            .then(data => {
+                const display = document.getElementById("order");
+
+                // Assuming the data returned is an object where `order` holds the actual order details
+                const orderDetails = data.order;
+
+                // Clear the innerHTML in case of multiple fetches
+                display.innerHTML = '';
+
+                // Manually define the desired display order for the order object
+                const displayOrder = ['orderNum', 'size', 'saucecheese', 'meats', 'toppings', 'quantity'];
+
+                // Loop through the array in the desired order and display each element
+                displayOrder.forEach(key => {
+                    const value = orderDetails[key];
+
+                    if (Array.isArray(value)) {
+                        // If the value is an array, join the elements for display
+                        display.innerHTML += `<strong>${key}:</strong> ${value.join(', ')}<br>`;
+                    } else {
+                        // Otherwise, display the key-value pair directly
+                        display.innerHTML += `<strong>${key}:</strong> ${value}<br>`;
+                    }
+                });
+            })
+    </script>
 </body>
+
 </html>

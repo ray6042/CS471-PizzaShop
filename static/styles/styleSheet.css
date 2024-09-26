@@ -259,7 +259,10 @@ body {
     cursor: pointer;
     margin-bottom: 30px;
 }
-
+:root{
+    --progress: 0%;
+    --progressBall: 0%;
+}
 .progress-bar {
     position: relative;
     height: 5px;
@@ -268,7 +271,7 @@ body {
 }
 
 .progress {
-    width: 50%;
+    width: var(--progress);
     height: 100%;
     background-color: #0056d7;
 }
@@ -276,7 +279,7 @@ body {
 .progress-indicator {
     position: absolute;
     top: -6px;
-    left: 50%;
+    left: var(--progressBall);
     transform: translateX(-50%);
     width: 15px;
     height: 15px;

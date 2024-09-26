@@ -49,60 +49,77 @@
     </div>
 <script>
     let Info = {
-            firstName: [],
-            lastName: [],
-            phoneNumber: [],
-            email: [],
-            address: [],
-            ordernum: [],
-            cardNum: [],
-            expDate: [],
-            cvv: [],
-            nameCard: []
-        };
-    document.getElementById('submitInfoBtn').addEventListener('click', function() {
-        const emailValue = document.getElementById("email").value.trim()
-        const firstNameValue = document.getElementById("first-name").value.trim()
-        const lastNameValue = document.getElementById("last-name").value.trim()
-        const addressValue = document.getElementById("address").value.trim()
-        const phoneNumberValue = document.getElementById("mobile-phone").value.trim()
-        const cardNumValue = document.getElementById("card-number").value.trim()
-        const expDateValue = document.getElementById("expiration-date").value.trim()
-        const cvvValue = document.getElementById("cvv").value.trim()
-        const nameCardValue = document.getElementById("name-on-card").value.trim()
-            if (emailValue != "" ){
-                Info.email.push(emailValue)
+    firstName: [],
+    lastName: [],
+    phoneNumber: [],
+    email: [],
+    address: [],
+    cardNum: [],
+    expDate: [],
+    cvv: [],
+    nameCard: [],
+    orderNum: []  // Added orderNum for the fetched order number
+};
+
+document.getElementById('submitInfoBtn').addEventListener('click', function() {
+    const emailValue = document.getElementById("email").value.trim();
+    const firstNameValue = document.getElementById("first-name").value.trim();
+    const lastNameValue = document.getElementById("last-name").value.trim();
+    const addressValue = document.getElementById("address").value.trim();
+    const phoneNumberValue = document.getElementById("mobile-phone").value.trim();
+    const cardNumValue = document.getElementById("card-number").value.trim();
+    const expDateValue = document.getElementById("expiration-date").value.trim();
+    const cvvValue = document.getElementById("cvv").value.trim();
+    const nameCardValue = document.getElementById("name-on-card").value.trim();
+    
+    // Push entered values into the Info object
+    if (emailValue != "") {
+        Info.email.push(emailValue);
+    }
+    if (firstNameValue != "") {
+        Info.firstName.push(firstNameValue);
+    }
+    if (lastNameValue != "") {
+        Info.lastName.push(lastNameValue);
+    }
+    if (addressValue != "") {
+        Info.address.push(addressValue);
+    }
+    if (phoneNumberValue != "") {
+        Info.phoneNumber.push(phoneNumberValue);
+    }
+    if (cardNumValue != "") {
+        Info.cardNum.push(cardNumValue);
+    }
+    if (expDateValue != "") {
+        Info.expDate.push(expDateValue);
+    }
+    if (cvvValue != "") {
+        Info.cvv.push(cvvValue);
+    }
+    if (nameCardValue != "") {
+        Info.nameCard.push(nameCardValue);
+    }
+
+    // Fetch data from the '/data' endpoint
+    fetch('/data')
+        .then(response => response.json())  // Parse the JSON response
+        .then(data => {
+            // Assuming the data contains an order number and other details
+            const orderDetails = data.order;  // Extract order details from the response
+
+            // Push the order number from the fetched data to Info
+            if (orderDetails && orderDetails.orderNum) {
+                Info.orderNum.push(orderDetails.orderNum);  // Add orderNum to Info
             }
-            if (firstNameValue != "" ){
-                Info.firstName.push(firstNameValue)
-            }
-            if (lastNameValue != "" ){
-                Info.lastName.push(lastNameValue)
-            }
-            if (addressValue != "" ){
-                Info.address.push(addressValue)
-            }
-            if (phoneNumberValue != "" ){
-                Info.phoneNumber.push(phoneNumberValue)
-            }
-            if (cardNumValue != "" ){
-                Info.cardNum.push(cardNumValue)
-            }
-            if (expDateValue != "" ){
-                Info.expDate.push(expDateValue)
-            }
-            if (cvvValue != "" ){
-                Info.cvv.push(cvvValue)
-            }
-            if (nameCardValue != "" ){
-                Info.nameCard.push(nameCardValue)
-            }
+
+            // Now that Info contains the merged data (from both form inputs and fetched data), you can send it to your Flask backend
             fetch('/info', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(Info)
+                body: JSON.stringify(Info)  // Send the complete Info object
             })
             .then(response => response.json())
             .then(info => {
@@ -112,7 +129,12 @@
             .catch((error) => {
                 console.error('Error:', error);
             });
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
         });
+});
+
 </script>
 </body>
 </html>

@@ -45,6 +45,10 @@ def builder():
 def menu():
     return render_template("StoreFront.html")
 
+@app.route("/tracking/")
+def tracking():
+    return render_template("Tracking.html")
+
 @app.route("/checkout/")
 def checkpit():
 
