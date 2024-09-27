@@ -77,44 +77,70 @@
 
             <div class="order-item">
                 <p id="demo"></p>
-                <p>Pizza Info Here</p>
             </div>
 
-            <form action="/checkout">
+            <form action="{{ url_for('checkout')}}"">
                 <button type="submit">Checkout</button>
             </form>
         </div>
     </div>
     <script>
-        fetch('/data')
+        fetch('/updateOrder')
             .then(response => response.json())  // Parse the JSON response
             .then(data => {
                 const display = document.getElementById("demo");
 
+                //get number of items in the order
+                const orderNum = data.items;
+
                 // Assuming the data returned is an object where `order` holds the actual order details
                 const orderDetails = data.order;
+
 
                 // Clear the innerHTML in case of multiple fetches
                 display.innerHTML = '';
 
+                const displayPizzas = [];
+                // Generate the item numbers in order to iterate through
+                for (let i = 0; i < orderNum; i++) {
+                    displayPizzas[i] = "Pizza " + (i + 1);
+                }
+
                 // Manually define the desired display order for the order object
-                const displayOrder = ['size', 'saucecheese', 'meats', 'toppings', 'quantity', 'orderNum'];
+                const displayOrder = ['size', 'saucecheese', 'meats', 'toppings', 'quantity', 'cost'];
 
-                // Loop through the array in the desired order and display each element
-                displayOrder.forEach(key => {
-                    const value = orderDetails[key];
+                displayPizzas.forEach(pizza => {
+                    // for each item in the orderDetails object, display the key-value pair
+                    display.innerHTML += `<strong>${pizza}</strong><br>`;
 
-                    if (Array.isArray(value)) {
-                        // If the value is an array, join the elements for display
-                        display.innerHTML += `<strong>${key}:</strong> ${value.join(', ')}<br>`;
-                    } else {
-                        // Otherwise, display the key-value pair directly
-                        display.innerHTML += `<strong>${key}:</strong> ${value}<br>`;
-                    }
+                    // Loop through the array in the desired order and display each element for each item
+                    displayOrder.forEach(parameter => {
+                        const value = orderDetails[pizza][parameter];
+
+                        if (Array.isArray(value)) {
+                            // If the value is an array, join the elements for display
+                            display.innerHTML += `<strong>${parameter}:</strong> ${value.join(', ')}<br>`;
+                        } else {
+                            if (parameter === 'cost') {
+                                // If the parameter is cost, display it as currency
+                                display.innerHTML += `<strong>${parameter}:</strong> $${value}<br>`;
+                            } else {
+                                // Otherwise, display the key-value pair directly
+                                display.innerHTML += `<strong>${parameter}:</strong> ${value}<br>`;
+                            }
+                        }
+                    });
+                    display.innerHTML += '<br>'; // Add a line break between pizzas
                 });
+                
+                //print orderID and totalCost if they exist
+                if (data.orderID) {
+                    //print the orderID
+                    display.innerHTML += `<strong>Order ID:</strong> ${data.orderID}<br>`;
+                    //print the totalCost
+                    display.innerHTML += `<strong>Total Cost:</strong> $${data.totalCost}`;
+                }
             })
-
-
     </script>
 
 </body>

@@ -38,7 +38,6 @@
           <button type="submit" class="btn signin-btn" name="do_login">
             <div class="btn-content">
               <span class="btn-text">Sign In</span>
-
             </div>
           </button>
         </center>
@@ -50,6 +49,34 @@
           <span class="btn-text">Sign Up</span>
         </div>
       </button>
+      {% with errors = get_flashed_messages(category_filter=["error"]) %}
+      {% if errors %}
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <ul>
+                {%- for msg in errors %}
+                <li>{{ msg }}</li>
+                {% endfor -%}
+            </ul>
+
+          <button type="button" class="btn-close" data-bs-dismiss="alert"
+                  aria-label="Close"></button>
+      </div>
+      {% endif %}
+      {% endwith %}
+
+      {% with messages = get_flashed_messages(category_filter=["success"]) %}
+      {% if messages %}
+      <div class="alert alert-success alert-dismissible fade show"role="alert">
+        <ul>
+          {%- for msg in messages %}
+          <li>{{ msg }}</li>
+          {% endfor -%}
+        </ul>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endif %}
+      {% endwith %}
+
 
       <div class="chip-bottom">
         <div class="chip-content">
@@ -66,36 +93,36 @@
   </section>
 
   <!-- Modal for Sign Up -->
-  <div id="signupModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal('signupModal')">&times;</span>
-      <h2>Create Account</h2>
-      <form id="sign-up">
-        <div class="input-group">
-          <label for="newUsername" class="input-label">Username</label>
-          <input type="text" id="newUsername" class="input-field" placeholder="Enter a username"
-            aria-label="New Username">
-        </div>
-        <div class="password-input-group">
-          <label for="newPassword" class="input-label">Password</label>
-          <input type="password" id="newPassword" class="password-input-field" placeholder="Enter a password"
-            aria-label="New Password">
-        </div>
-        <div class="password-input-group">
-          <label for="confirmPassword" class="input-label">Confirm Password</label>
-          <input type="password" id="confirmPassword" class="password-input-field" placeholder="Confirm your password"
-            aria-label="Confirm Password">
-        </div>
-        <center>
-          <button type="submit" class="btn">
-            <div class="btn-content">
-              <span class="btn-text">Create Account</span>
-            </div>
-          </button>
-        </center>
-      </form>
+    <div id="signupModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('signupModal')">&times;</span>
+        <h2>Create Account</h2>
+        <form id="sign-up" action="{{ url_for('signUp')}}" method="post">
+          <div class="input-group">
+            <label for="newUsername" class="input-label">Username</label>
+            <input type="text" name="newUsername" id="newUsername" class="input-field" placeholder="Enter a username"
+              aria-label="New Username">
+          </div>
+          <div class="password-input-group">
+            <label for="newPassword" class="input-label">Password</label>
+            <input type="password" name="newPassword" id="newPassword" class="password-input-field" placeholder="Enter a password"
+              aria-label="New Password">
+          </div>
+          <div class="password-input-group">
+            <label for="confirmPassword" class="input-label">Confirm Password</label>
+            <input type="password" name="confirmPassword" id="confirmPassword" class="password-input-field" placeholder="Confirm your password"
+              aria-label="Confirm Password">
+          </div>
+          <center>
+            <button type="submit" class="btn signin-btn" name="do_signup">
+              <div class="btn-content">
+                <span class="btn-text">Create Account</span>
+              </div>
+            </button>
+          </center>
+        </form>
+      </div>
     </div>
-  </div>
 
   <!-- Modal for Tracking Order -->
   <div id="trackingModal" class="modal">
