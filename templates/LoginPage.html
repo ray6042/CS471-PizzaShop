@@ -24,25 +24,26 @@
       <form action="{{ url_for('home')}}" method="post">
         <div class="input-group">
           <label for="username" class="input-label">Username</label>
-          <input type="text" name="username" id="username" class="input-field" placeholder="Enter your username" aria-label="Username">
+          <input type="text" name="username" id="username" class="input-field" placeholder="Enter your username"
+            aria-label="Username">
         </div>
 
         <div class="password-input-group">
           <label for="password" class="input-label">Password</label>
-          <input type="password" name="password" id="password" class="password-input-field" placeholder="Enter your password"
-            aria-label="Password">
+          <input type="password" name="password" id="password" class="password-input-field"
+            placeholder="Enter your password" aria-label="Password">
         </div>
 
         <center>
           <button type="submit" class="btn signin-btn" name="do_login">
             <div class="btn-content">
-              <span class="btn-text" >Sign In</span>
-                
+              <span class="btn-text">Sign In</span>
+
             </div>
           </button>
         </center>
       </form>
-      
+
 
       <button class="btn signup-btn" onclick="openSignupModal()">
         <div class="btn-content">
@@ -101,19 +102,17 @@
     <div class="modal-content">
       <span class="close" onclick="closeModal('trackingModal')">&times;</span>
       <h2>Track Your Order</h2>
-      <form>
+      <form action="{{ url_for('tracking')}}">
         <div class="input-group">
           <label for="trackingNumber" class="input-label">Tracking Number</label>
           <input type="text" id="trackingNumber" class="input-field" placeholder="Enter your tracking number"
             aria-label="Tracking Number">
         </div>
         <center>
-          <form action = "{{ url_for('tracking')}}">
-          <button type="submit" class="btn">
+          <button class="btn">
             <div class="btn-content">
               <span class="btn-text">Track Order</span>
             </div>
-          </form>
           </button>
         </center>
       </form>

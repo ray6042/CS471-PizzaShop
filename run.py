@@ -58,11 +58,9 @@ def data():
     if request.method == 'POST':
         # Handle POST request to update order
         order = request.get_json()
-        if not order:
-            return jsonify({"status": "error", "message": "No data received"}), 400
         global order_data
         order_data = {"order": order}
-        return jsonify({"status": "success", "order": order}), 200
+        
 
     # For GET requests, return the existing order as JSON
     return jsonify(order_data), 200  # This ensures Content-Type is application/json
@@ -71,11 +69,9 @@ def info():
     if request.method == 'POST':
         # Handle POST request to update order
         info = request.get_json()
-        if not info:
-            return jsonify({"status": "error", "message": "No data received"}), 400
-        global info_data
+       
         info_data = {"Info": info}
-        return jsonify({"status": "success", "Info": info}), 200
+        
 
     # For GET requests, return the existing order as JSON
     return jsonify(info_data), 200  # This ensures Content-Type is application/json
