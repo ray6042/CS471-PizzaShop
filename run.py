@@ -168,6 +168,15 @@ def getOrder():
 @app.route('/admin/')
 def admin():
     return render_template("PizzaAdmin.html")
+@app.route('/admin/design')
+def admin():
+    return render_template("DesignPizza.html")
+@app.route('/admin/add-remove')
+def admin():
+    return render_template("AddandRemove.html")
+@app.route('/admin/pizza-remover')
+def admin():
+    return render_template("RemovePizza.html")
 
 if __name__ == "__main__":
     app.secret_key='test secret key'

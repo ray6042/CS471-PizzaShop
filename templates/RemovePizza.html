@@ -84,22 +84,13 @@
         </div>
     </div>
     <script>
-         let pizzaOrder = {
-            pizza1: [1],
-            pizza2: [1],
-            pizza3: [1],
-            pizza4: [1],
-            pizza5: [1],
-            pizza6: [1],
-        }
         var menuItems = document.querySelectorAll('.menu-item');
 
         // Add click event listener to each menu item
         menuItems.forEach(function (item) {
             item.addEventListener("click", function () {
                 item.remove(); // Remove the clicked div element
-                pizzaOrder.pizza1.pop(0)
-                pizzaOrder.pizza1.push('0')
+               
             });
         });
     </script>
