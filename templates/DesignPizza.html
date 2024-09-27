@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizza Builder</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styleSheet.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1>Kettering University Pizza Shop</h1>
+    </div>
+
+    <div class="builder-container">
+        <div class="section">
+            <h2>Sauce and Cheese Options</h2>
+            <div class="size-options">
+                <label><input type="radio" name="size" data-value="Pizza Sauce" > Pizza Sauce</label>
+                <label><input type="radio" name="size" data-value="Mozzarella" > Mozzarella</label>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Meats</h2>
+            <div class="options">
+                <label><input type="checkbox" name="sauce-cheese" data-value="Radio Text" > Radio Text</label>
+                <label><input type="checkbox" name="sauce-cheese" data-value="Radio Text" > Radio Text</label>
+                <label><input type="checkbox" name="sauce-cheese" data-value="Radio Text" > Radio Text</label>
+                <label><input type="checkbox" name="sauce-cheese" data-value="Radio Text" > Radio Text</label>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Other Toppings</h2>
+            <div class="options">
+                <label><input type="checkbox" name="Radio Text" data-value="Radio Text" > Radio Text</label>
+                <label><input type="checkbox" name="Radio Text" data-value="Radio Text" > Radio Text</label>
+                <label><input type="checkbox" name="Radio Text" data-value="Radio Text" > Radio Text</label>
+                <label><input type="checkbox" name="Radio Text" data-value="Radio Text" > Radio Text</label>
+                <label><input type="checkbox" name="Radio Text" data-value="Radio Text" > Radio Text</label>
+				<label><input type="checkbox" name="Radio Text" data-value="Radio Text" > Radio Text</label>
+                <label><input type="checkbox" name="Radio Text" data-value="Radio Text" > Radio Text</label>
+                <label><input type="checkbox" name="Radio Text" data-value="Radio Text" > Radio Text</label>
+                <label><input type="checkbox" name="Radio Text" data-value="Radio Text" > Radio Text</label>
+                <label><input type="checkbox" name="Radio Text" data-value="Radio Text" > Radio Text</label>
+				<label><input type="checkbox" name="Radio Text" data-value="Radio Text" > Radio Text</label>
+                <label><input type="checkbox" name="Radio Text" data-value="Radio Text" > Radio Text</label>
+                <label><input type="checkbox" name="Radio Text" data-value="Radio Text" > Radio Text</label>
+                <label><input type="checkbox" name="Radio Text" data-value="Radio Text" > Radio Text</label>
+                <label><input type="checkbox" name="Radio Text" data-value="Radio Text" > Radio Text</label>
+            </div>
+        </div>
+
+        <div class="section buttons-section">
+            <form action ="{{ url_for('menu')}}">
+            <button class="action-btn" id = 'action-btn'>Back to Menu</button>
+        </form>
+        <form action ="{{ url_for('menu')}}">
+        <div class="section buttons-section">
+            <button class="action-btn" id="submitOrderBtn">Add To Site</button>
+        </div>
+    </form>
+        
+    </div>    
+</body>
+</html>

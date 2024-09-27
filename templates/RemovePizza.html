@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styleSheet.css') }}">
+    <title>Kettering University Pizza Shop</title>
+</head>
+<body>
+
+    <div class="header">
+        Kettering University Pizza Shop
+    </div>
+
+    <div class="container">
+        <div class="menu">
+            <form action="{{ url_for('builder')}}">
+            <button type="submit" class="btn pizzabuilder-btn" >
+            <div class="menu-item">
+            <img src="{{ url_for('static', filename='styles/pizza.jpeg') }}" alt="Pizza">
+            <h3>Build Your Own</h3>
+            <p>Create your own pizza with a choice of toppings and delicious crusts.</p>
+            </div>
+            </button>
+            </form>
+            <form action="{{ url_for('builder')}}">
+            <button type="submit" class="btn pizzabuilder-btn" name="do_builder">
+            <div class="menu-item">
+            <img src="{{ url_for('static', filename='styles/pizza.jpeg') }}" alt="Pizza">
+            <h3>Build Your Own</h3>
+            <p>Create your own pizza with a choice of toppings and delicious crusts.</p>
+            </div>
+            </button>
+            </form>
+            <form action="{{ url_for('builder')}}">
+            <button type="submit" class="btn pizzabuilder-btn" name="do_builder">
+            <div class="menu-item">
+            <img src="{{ url_for('static', filename='styles/pizza.jpeg') }}" alt="Pizza">
+            <h3>Build Your Own</h3>
+            <p>Create your own pizza with a choice of toppings and delicious crusts.</p>
+            </div>
+            </button>
+            </form>
+            <form action="{{ url_for('builder')}}">
+            <button type="submit" class="btn pizzabuilder-btn" name="do_builder">
+            <div class="menu-item">
+            <img src="{{ url_for('static', filename='styles/pizza.jpeg') }}" alt="Pizza">
+            <h3>Build Your Own</h3>
+            <p>Create your own pizza with a choice of toppings and delicious crusts.</p>
+            </div>
+            </button>
+            </form>
+            <form action="{{ url_for('builder')}}">
+            <button type="submit" class="btn pizzabuilder-btn" name="do_builder">
+            <div class="menu-item">
+            <img src="{{ url_for('static', filename='styles/pizza.jpeg') }}" alt="Pizza">
+            <h3>Build Your Own</h3>
+            <p>Create your own pizza with a choice of toppings and delicious crusts.</p>
+            </div>
+            </button>
+            </form>
+            <form action="{{ url_for('builder')}}">
+            <button type="submit" class="btn pizzabuilder-btn" name="do_builder">
+            <div class="menu-item">
+            <img src="{{ url_for('static', filename='styles/pizza.jpeg') }}" alt="Pizza">
+            <h3>Build Your Own</h3>
+            <p>Create your own pizza with a choice of toppings and delicious crusts.</p>
+            </div>
+            </button>
+            </form>
+            </div>
+
+        <div class="order-summary">
+            <h3>Your Order</h3>
+            
+            <div class="order-item">
+                <p id = "demo"></p>
+                <p>To remove a pizza from your offering just click it here and it will dissapear. Clicking on Build your own will do nothing since it is not able to be changed.</p>
+            </div>
+            
+            <form action="/checkout">
+    <button type="submit">Checkout</button>
+			</form>
+        </div>
+    </div>
+    <script>
+        fetch('/data')
+            .then(response => response.json())  // Parse the JSON response
+            .then(data => {
+                const display = document.getElementById("demo");
+    
+                // Assuming the data returned is an object where `order` holds the actual order details
+                const orderDetails = data.order;
+    
+                // Clear the innerHTML in case of multiple fetches
+                display.innerHTML = '';
+    
+                // Manually define the desired display order for the order object
+                const displayOrder = ['size', 'saucecheese', 'meats', 'toppings', 'quantity', 'ordernum'];
+    
+                // Loop through the array in the desired order and display each element
+                displayOrder.forEach(key => {
+                    const value = orderDetails[key];
+    
+                    if (Array.isArray(value)) {
+                        // If the value is an array, join the elements for display
+                        display.innerHTML += `<strong>${key}:</strong> ${value.join(', ')}<br>`;
+                    } else {
+                        // Otherwise, display the key-value pair directly
+                        display.innerHTML += `<strong>${key}:</strong> ${value}<br>`;
+                    }
+                });
+            })
+            
+            
+    </script>
+    
+</body>
+</html>
