@@ -31,6 +31,7 @@ client = MongoClient('mongodb://localhost:27017/')
 db = client['pizzaShop']
 collectionLogin = db['loginData']
 collectionOrders = db['currentOrder']
+collectionMenu = db['menu']
 
 # Set Default Site Location
 @app.route("/")
@@ -92,6 +93,44 @@ def signUp():
 @app.route("/builder/")
 def builder():
     return render_template("PizzaBuilder.html")
+
+# Transfer to speciality pizza page when selected
+@app.route("/specialty/", methods=["POST"])
+def specialty():
+    #collect pizza name from form
+    pizzaName = request.form.get("pizzaName")
+    print(pizzaName)
+
+    #collect pizza from menu database
+    pizza = collectionMenu.find_one({"name": pizzaName})
+
+    #get data from pizza object
+    pizzaDesc = pizza['description']
+    pizzaSauceCheese = pizza['saucecheese']
+    pizzaToppings = pizza['toppings']
+    pizzaMeats = pizza['meats']
+    pizzaCost = pizza['smallCost']
+
+    return render_template("SpecialtyPizza.html", pizzaName=pizzaName, pizzaDesc=pizzaDesc, pizzaSauceCheese=pizzaSauceCheese, pizzaToppings=pizzaToppings, pizzaMeats=pizzaMeats, pizzaCost=pizzaCost)
+
+# Add a new speciality pizza to the menu
+@app.route("/addSpecialityPizza/", methods=["POST"])
+def addSpecialty():
+    newPizza = request.get_json()
+    # Add the new pizza to the menu
+    collectionMenu.insert_one(newPizza)
+    # Return to the admin page
+    return render_template("PizzaAdmin.html")
+
+
+# Pull menu data from database
+@app.route("/menuItems/")
+def menuItems():
+    menu = list(collectionMenu.find({}, {'_id': 0}))
+    print(menu)
+    menuList = {}
+
+    return jsonify(menu), 200 # This ensures Content-Type is application/json
 
 # Reset home as storefront once login achieved
 @app.route("/home/")

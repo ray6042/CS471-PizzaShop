@@ -16,60 +16,7 @@
 
     <div class="container">
         <div class="menu">
-            <form action="{{ url_for('builder')}}">
-                <button type="submit" class="btn pizzabuilder-btn">
-                    <div class="menu-item">
-                        <img src="{{ url_for('static', filename='styles/pizza.jpeg') }}" alt="Pizza">
-                        <h3>Build Your Own</h3>
-                        <p>Create your own pizza with a choice of toppings and delicious crusts.</p>
-                    </div>
-                </button>
-            </form>
-            <form action="{{ url_for('builder')}}">
-                <button type="submit" class="btn pizzabuilder-btn" name="do_builder">
-                    <div class="menu-item">
-                        <img src="{{ url_for('static', filename='styles/pizza.jpeg') }}" alt="Pizza">
-                        <h3>Build Your Own</h3>
-                        <p>Create your own pizza with a choice of toppings and delicious crusts.</p>
-                    </div>
-                </button>
-            </form>
-            <form action="{{ url_for('builder')}}">
-                <button type="submit" class="btn pizzabuilder-btn" name="do_builder">
-                    <div class="menu-item">
-                        <img src="{{ url_for('static', filename='styles/pizza.jpeg') }}" alt="Pizza">
-                        <h3>Build Your Own</h3>
-                        <p>Create your own pizza with a choice of toppings and delicious crusts.</p>
-                    </div>
-                </button>
-            </form>
-            <form action="{{ url_for('builder')}}">
-                <button type="submit" class="btn pizzabuilder-btn" name="do_builder">
-                    <div class="menu-item">
-                        <img src="{{ url_for('static', filename='styles/pizza.jpeg') }}" alt="Pizza">
-                        <h3>Build Your Own</h3>
-                        <p>Create your own pizza with a choice of toppings and delicious crusts.</p>
-                    </div>
-                </button>
-            </form>
-            <form action="{{ url_for('builder')}}">
-                <button type="submit" class="btn pizzabuilder-btn" name="do_builder">
-                    <div class="menu-item">
-                        <img src="{{ url_for('static', filename='styles/pizza.jpeg') }}" alt="Pizza">
-                        <h3>Build Your Own</h3>
-                        <p>Create your own pizza with a choice of toppings and delicious crusts.</p>
-                    </div>
-                </button>
-            </form>
-            <form action="{{ url_for('builder')}}">
-                <button type="submit" class="btn pizzabuilder-btn" name="do_builder">
-                    <div class="menu-item">
-                        <img src="{{ url_for('static', filename='styles/pizza.jpeg') }}" alt="Pizza">
-                        <h3>Build Your Own</h3>
-                        <p>Create your own pizza with a choice of toppings and delicious crusts.</p>
-                    </div>
-                </button>
-            </form>
+            <!-- Menu items will be added here -->
         </div>
 
         <div class="order-summary">
@@ -90,6 +37,46 @@
         </form>
     </div>  
     <script>
+        // Fetch the menu from the server
+        window.onload = function() {
+            fetch('/menuItems')
+            .then(response => response.json())
+            .then(menuItems => {
+                const menuContainer = document.querySelector('.menu');
+                menuContainer.innerHTML = ''; // Clear existing menu items
+
+                menuItems.forEach(item => {
+                const form = document.createElement('form');
+                form.action = "{{ url_for('specialty') }}";
+                form.method = "post";
+                form.innerHTML = `
+                    <button type="submit" class="btn pizzabuilder-btn">
+                    <div class="menu-item">
+                        <img src="${item.image}" alt="Pizza">
+                        <h3 name="pizzaName" id="pizzaName">${item.name}</h3>
+                        <p>${item.description}</p>
+                    </div>
+                    <input type="hidden" name="pizzaName" value="${item.name}">
+                    </button>
+                `;
+                menuContainer.appendChild(form);
+                });
+                const builderForm = document.createElement('form');
+                builderForm.action = "{{ url_for('builder') }}";
+                builderForm.innerHTML = `
+                <button type="submit" class="btn pizzabuilder-btn">
+                    <div class="menu-item">
+                    <img src="{{ url_for('static', filename='styles/pizza.jpeg') }}" alt="Pizza">
+                    <h3>Build Your Own</h3>
+                    <p>Create your own pizza with a choice of toppings and delicious crusts.</p>
+                    </div>
+                </button>
+                `;
+                menuContainer.appendChild(builderForm);
+            })
+            .catch(error => console.error('Error fetching menu items:', error));
+        };
+
         fetch('/updateOrder')
             .then(response => response.json())  // Parse the JSON response
             .then(data => {

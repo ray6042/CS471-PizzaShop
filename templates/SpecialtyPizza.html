@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizza Builder</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/styleSheet.css') }}">
+</head>
+
+<body>
+    <div class="header">
+        <h1>Kettering University Pizza Shop</h1>
+    </div>
+
+    <div class="section">
+        <h2 id="pizzaName" name="pizzaName">{{pizzaName}}</h2>
+        <p id="pizzaDesc" name="pizzaDesc">{{pizzaDesc}}</p>
+        {% for item in pizzaSauceCheese %}
+        <p>{{ item }}</p>
+        {% endfor %}
+        {% for item in pizzaToppings %}
+        <p>{{ item }}</p>
+        {% endfor %}
+        {% for item in pizzaMeats %}
+        <p>{{ item }}</p>
+        {% endfor %}
+    </div>
+
+    <div class="section">
+        <h2>Pizza Size</h2>
+        <h3>Small = {{pizzaCost}}, Medium = +$2, Large = +$4</h3>
+        <div class="size-options">
+            <label><input type="radio" name="size" data-value="Small" onclick="updateOrder(this)"> Small</label>
+            <label><input type="radio" name="size" data-value="Medium" onclick="updateOrder(this)"> Medium</label>
+            <label><input type="radio" name="size" data-value="Large" onclick="updateOrder(this)"> Large</label>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Quantity</h2>
+        <div class="quantity-selector">
+            <button class="quantity-btn" onclick="decrementQuantity()">-</button>
+            <input type="text" id="quantity" value="1" readonly>
+            <button class="quantity-btn" onclick="incrementQuantity()">+</button>
+        </div>
+    </div>
+
+    <div class="section buttons-section">
+        <form action="{{ url_for('menu')}}">
+            <button class="action-btn" id='action-btn'>Back to Menu</button>
+        </form>
+        <form action="{{ url_for('menu')}}">
+            <div class="section buttons-section">
+                <button class="action-btn" onclick="computeCost()" id="submitOrderBtn">Submit Order</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        let order = {
+            size: null,
+            saucecheese: JSON.parse('{{pizzaSauceCheese | tojson | safe}}'),
+            meats: JSON.parse('{{pizzaMeats | tojson | safe}}'),
+            toppings: JSON.parse('{{pizzaToppings | tojson | safe}}'),
+            quantity: 1,
+            cost: 0
+        };
+
+        // Quantity update functions
+        function incrementQuantity() {
+            order.quantity++;
+            document.getElementById('quantity').value = order.quantity;
+        }
+
+        function decrementQuantity() {
+            if (order.quantity > 1) {
+                order.quantity--;
+                document.getElementById('quantity').value = order.quantity;
+            }
+        }
+
+        // Update the order object based on the selected options
+        // Function to handle updates to the order object
+        function updateOrder(element) {
+            const value = element.getAttribute('data-value');
+            const type = element.name;  // Identify whether it's size, saucecheese, meats, or toppings
+
+            // For radio buttons (size selection)
+            if (element.type === "radio" && type === "size") {
+                order.size = value;
+            }
+        }
+
+        // Submit the order to the backend
+        document.getElementById('submitOrderBtn').addEventListener('click', function () {
+            fetch('/updateOrder', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(order)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Order successfully submitted:', data);
+                    alert('Order submitted successfully!');
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        });
+
+        // Function to compute the cost of the order
+        function computeCost() {
+            let tempCost = JSON.parse('{{pizzaCost | tojson | safe}}');
+
+            // Update cost based on size
+            if (order.size === "Small") {
+                tempCost += 0;
+            } else if (order.size === "Medium") {
+                tempCost += 2;
+            } else if (order.size === "Large") {
+                tempCost += 4;
+            }
+
+            order.cost = tempCost * order.quantity;
+        }
+    </script>
+</body>
