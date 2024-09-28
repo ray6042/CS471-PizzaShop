@@ -80,18 +80,28 @@
             </div>
 
             <form action="{{ url_for('checkout')}}"">
-                <button type="submit">Checkout</button>
+                <button name="checkout" id="checkout" type="submit" style="background-color: grey; color: white;" disabled>Checkout</button>
             </form>
         </div>
     </div>
+    <div class="logout-btn-container">
+        <form action="{{ url_for('logout')}}" onsubmit="return confirm('Are you sure you want to log out?');">
+            <button name="logout" id = "logout" type="submit" class="logout-btn">Log out</button>
+        </form>
+    </div>  
     <script>
         fetch('/updateOrder')
             .then(response => response.json())  // Parse the JSON response
             .then(data => {
                 const display = document.getElementById("demo");
-
                 //get number of items in the order
                 const orderNum = data.items;
+
+                //enable the checkout button if there is at least one item in the order
+                if (orderNum > 0) {
+                    document.getElementById("checkout").disabled = false; //enable the button
+                    document.getElementById("checkout").style.backgroundColor = "#0056d7"; //change the color of the button to blue
+                }
 
                 // Assuming the data returned is an object where `order` holds the actual order details
                 const orderDetails = data.order;
@@ -142,7 +152,6 @@
                 }
             })
     </script>
-
 </body>
 
 </html>

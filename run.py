@@ -45,10 +45,18 @@ def home():
     login_data['username'] = request.form.get("username")
     login_data['password'] = request.form.get("password")
 
+    print("test")
+
     # Check if username and password match
-    if collectionLogin.find_one(login_data):
-        flash('Login successful!', 'success')
-        return render_template("StoreFront.html")
+    user = collectionLogin.find_one(login_data)
+    if user:
+        # if login successful, check access level
+        access = user['access']
+
+        if access == 'admin':
+            return render_template("PizzaAdmin.html")
+        else:
+            return render_template("StoreFront.html")
     else:
         if collectionLogin.find_one({"username": login_data['username']}):
             flash('Incorrect password! Please try again.', 'error')
@@ -62,6 +70,7 @@ def signUp():
     sign_up_data = {}
     sign_up_data['username'] = request.form.get("newUsername")
     sign_up_data['password'] = request.form.get("newPassword")
+    sign_up_data['access'] = 'user' #default access level, admin must be manually set
     confirmPassword = request.form.get("confirmPassword")
 
     # Check if passwords match
@@ -168,16 +177,31 @@ def getOrder():
 @app.route('/admin/')
 def admin():
     return render_template("PizzaAdmin.html")
-@app.route('/admin/design')
-def admin():
+@app.route('/admin-design')
+def admin_design():
     return render_template("DesignPizza.html")
-@app.route('/admin/add-remove')
-def admin():
+@app.route('/admin-add-remove')
+def admin_pizzaDesign():
     return render_template("AddandRemove.html")
-@app.route('/admin/pizza-remover')
-def admin():
+@app.route('/admin-pizza-remover')
+def admin_pizzaRemove():
     return render_template("RemovePizza.html")
 
+# Handle logout
+@app.route('/logout/')
+def logout():
+    #clear login data and order data to reset app
+    global login_data
+    global order_data
+    global orderItemCount
+    global currentOrderID
+    login_data = {}
+    order_data = {}
+    orderItemCount = 0
+    currentOrderID = ""
+    return render_template("LoginPage.html")
+
+# Run the app
 if __name__ == "__main__":
     app.secret_key='test secret key'
     app.config['SESSION_TYPE'] = 'filesystem'
