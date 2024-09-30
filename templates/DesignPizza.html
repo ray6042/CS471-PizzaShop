@@ -125,12 +125,11 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log('Success:', data);
-                    // Optionally, you can redirect or show a success message here
+                    //redirect back to admin overview
+                    window.location.href = '/admin';
                 })
                 .catch((error) => {
                     console.error('Error:', error);
-                    // Optionally, you can show an error message here
                 });
         });
 

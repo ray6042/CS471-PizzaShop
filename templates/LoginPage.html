@@ -50,6 +50,7 @@
         </div>
       </button>
 
+      <!-- Display error messages sent from login from Flask's flash -->
       {% with errors = get_flashed_messages(category_filter=["error"]) %}
       {% if errors %}
       <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -64,6 +65,7 @@
       {% endif %}
       {% endwith %}
 
+      <!-- Display success message from Flask's flash -->
       {% with messages = get_flashed_messages(category_filter=["success"]) %}
       {% if messages %}
       <div class="alert alert-success alert-dismissible fade show" role="alert"></div>

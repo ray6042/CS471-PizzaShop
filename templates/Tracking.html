@@ -47,11 +47,11 @@
                 //get number of items in the order
                 const orderNum = data.items;
 
-                // Assuming the data returned is an object where `order` holds the actual order details
+                // Get the order details from the response
                 const orderDetails = data.order;
 
 
-                // Clear the innerHTML in case of multiple fetches
+                // Reset the innerHTML
                 display.innerHTML = '';
 
                 const displayPizzas = [];
@@ -64,7 +64,7 @@
                 const displayOrder = ['size', 'saucecheese', 'meats', 'toppings', 'quantity', 'cost'];
 
                 displayPizzas.forEach(pizza => {
-                    // for each item in the orderDetails object, display the key-value pair
+                    // for each item in the order, display the pizza information
                     display.innerHTML += `<strong>${pizza}</strong><br>`;
 
                     // Loop through the array in the desired order and display each element for each item

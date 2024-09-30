@@ -20,6 +20,7 @@ import math
 from threading import Thread
 import time
 
+#initialize the flask app
 app = Flask(__name__, template_folder='templates', static_folder='static')
 
 #initialize global variables
@@ -30,6 +31,8 @@ currentOrderID= ""
 
 # Create a new client and connect to the server
 client = MongoClient('mongodb://localhost:27017/') 
+
+#create the main database and then collections
 db = client['pizzaShop']
 collectionLogin = db['loginData']
 collectionOrders = db['currentOrder']
@@ -45,6 +48,7 @@ def index():
 def home():
     global login_data
     login_data = {}
+    #get login data from form
     login_data['username'] = request.form.get("username")
     login_data['password'] = request.form.get("password")
 
@@ -59,6 +63,7 @@ def home():
         else:
             return render_template("StoreFront.html")
     else:
+        # if not successful, show user why
         if collectionLogin.find_one({"username": login_data['username']}):
             flash('Incorrect password! Please try again.', 'error')
         else:
@@ -126,9 +131,6 @@ def addSpecialty():
 @app.route("/menuItems/")
 def menuItems():
     menu = list(collectionMenu.find({}, {'_id': 0}))
-    print(menu)
-    menuList = {}
-
     return jsonify(menu), 200 
 
 # Reset home as storefront once login achieved
