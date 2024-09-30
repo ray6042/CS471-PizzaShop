@@ -1,8 +1,8 @@
 # CS471 - Pizza Online Shop Project
 # Authors: Andreas Lanni, Chris Meharg, Noah Ray, Matthew Tenniswood
-# Date: 2024-09-03 (YYYY-MM-DD)
+# Date: 2024-09-30 (YYYY-MM-DD)
 # Description: This file is the main entry point for the 
-# PizzaShopBackEnd project, connection to the database and running the Flask
+# PizzaShop project, connection to the database and running the Flask
 # app for the web application.
 # To Run (With proper python, local mongod installation)
 #   open a cmd prompt, type mongod to launch the local mongoDB server
@@ -12,11 +12,13 @@
 
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from flask import Flask, render_template, request, jsonify, flash
+from flask import Flask, render_template, request, jsonify, flash, redirect, url_for
 import json
 import subprocess
 import random
 import math
+from threading import Thread
+import time
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
 
@@ -38,15 +40,13 @@ collectionMenu = db['menu']
 def index():
     return render_template("LoginPage.html")
 
-# Respond to POST request to login
+# Respond to login request
 @app.route("/home/", methods=["POST"])
 def home():
     global login_data
     login_data = {}
     login_data['username'] = request.form.get("username")
     login_data['password'] = request.form.get("password")
-
-    print("test")
 
     # Check if username and password match
     user = collectionLogin.find_one(login_data)
@@ -65,7 +65,7 @@ def home():
             flash('Username does not exist! Please try again.', 'error')
         return render_template("LoginPage.html")
 
-# Respond to POST request to sign up   
+# Respond to sign-up request
 @app.route("/signUp/", methods=["POST"])
 def signUp():
     sign_up_data = {}
@@ -94,7 +94,7 @@ def signUp():
 def builder():
     return render_template("PizzaBuilder.html")
 
-# Transfer to speciality pizza page when selected
+# Transfer to speciality pizza page when speciality pizza selected
 @app.route("/specialty/", methods=["POST"])
 def specialty():
     #collect pizza name from form
@@ -113,7 +113,7 @@ def specialty():
 
     return render_template("SpecialtyPizza.html", pizzaName=pizzaName, pizzaDesc=pizzaDesc, pizzaSauceCheese=pizzaSauceCheese, pizzaToppings=pizzaToppings, pizzaMeats=pizzaMeats, pizzaCost=pizzaCost)
 
-# Add a new speciality pizza to the menu
+# Add a new speciality pizza to the menu via admin page
 @app.route("/addSpecialityPizza/", methods=["POST"])
 def addSpecialty():
     newPizza = request.get_json()
@@ -122,26 +122,27 @@ def addSpecialty():
     # Return to the admin page
     return render_template("PizzaAdmin.html")
 
-
-# Pull menu data from database
+# Pull menu data from database for storefront
 @app.route("/menuItems/")
 def menuItems():
     menu = list(collectionMenu.find({}, {'_id': 0}))
     print(menu)
     menuList = {}
 
-    return jsonify(menu), 200 # This ensures Content-Type is application/json
+    return jsonify(menu), 200 
 
 # Reset home as storefront once login achieved
 @app.route("/home/")
 def menu():
     return render_template("StoreFront.html")
 
-# Transfer to tracking page after order is placed
-@app.route("/tracking/", methods=["POST"])
-def tracking():
+# Confirm order and transfer to tracking page after order is placed
+@app.route("/confirmOrder/", methods=["POST"])
+def confirmOrder():
     print("Order Placed")
-    global order_data #access order data to merge
+    global order_data #access order data
+    
+    #collect user data from form to merge with order data
     user_data = {}
     user_data['first-name'] = request.form.get("first-name")
     user_data['last-name'] = request.form.get("last-name")
@@ -156,13 +157,49 @@ def tracking():
     #extract order ID for tracking page
     order_id = order_data['orderID']
     print(user_data)
+
     #combine user data with order data
     order_data = {**order_data, **user_data}
     print(order_data)
 
+    #set the order status to Order Placed
+    order_data['status'] = "Order Placed"
+
+    #post the order data to database
     collectionOrders.insert_one(order_data)
 
-    return render_template("Tracking.html", order_id=order_id)
+    # Start the thread to update order status
+    start_order_status_thread(order_data['orderID'])
+
+    return redirect(url_for("tracking", order_id=order_id))
+
+# Start a background thread to update order status
+def start_order_status_thread(orderID):
+    thread = Thread(target=update_order_status, args=(orderID,))
+    thread.daemon = True
+    thread.start()
+
+# Show tracking page for order input
+@app.route("/tracking/", methods=["POST", "GET"])
+def tracking(order_id=None):
+
+    # get order_id from url
+    order_id = request.args.get("order_id")
+    
+    # If order_id not in url get from form
+    if not order_id:
+        order_id = request.form.get("trackingNumber")
+
+    # Verify that the order ID exists in the database
+    order = collectionOrders.find_one({"orderID": order_id})
+    if not order:
+        flash('Order ID does not exist! Please try again.', 'error')
+        return render_template("LoginPage.html")
+    else:
+        # Update the global ID for the get function
+        global currentOrderID
+        currentOrderID = order_id
+        return render_template("Tracking.html", order_id=order_id)
 
 # Transfer to checkout page
 @app.route("/checkout/", methods=["GET", "POST"])
@@ -198,7 +235,7 @@ def updateOrder():
             currentOrderID = orderID
             order_data = {"order": {keyString: order}, "username": login_data['username'], "items": orderItemCount, "orderID": orderID, "totalCost": order['cost']}
         print(order_data)
-    return jsonify(order_data), 200 # This ensures Content-Type is application/json
+    return jsonify(order_data), 200 
 
 @app.route('/getOrder/', methods=['GET'])
 def getOrder():
@@ -211,20 +248,42 @@ def getOrder():
     order_data.pop('_id')
 
     # Handle GET request to retrieve order
-    return jsonify(order_data), 200 # This ensures Content-Type is application/json
+    return jsonify(order_data), 200 
 
+# Set route for default admin overview page
 @app.route('/admin/')
 def admin():
     return render_template("PizzaAdmin.html")
+
+# Set route for admin page to add a new pizza
 @app.route('/admin-design')
 def admin_design():
     return render_template("DesignPizza.html")
-@app.route('/admin-add-remove')
-def admin_pizzaDesign():
-    return render_template("AddandRemove.html")
+
+# Set route for admin page to remove a pizza from menu
 @app.route('/admin-pizza-remover')
 def admin_pizzaRemove():
     return render_template("RemovePizza.html")
+    
+# Handle pizza removal when selected in admin page
+@app.route('/remove/', methods=['POST'])
+def remove():
+    #remove pizza from menu
+    pizzaName = request.form.get("pizzaName")
+    collectionMenu.delete_one({"name": pizzaName})
+    return render_template("RemovePizza.html")
+
+# Set route for admin page to view all orders and summary data
+@app.route('/admin-orders')
+def admin_orders():
+    return render_template("AdminOrders.html")
+
+# Retrieve all orders from the database
+@app.route('/getAllOrders/', methods=['GET'])
+def getAllOrders():
+    #retrieve all orders from database
+    orders = list(collectionOrders.find({}, {'_id': 0}))
+    return jsonify(orders), 200
 
 # Handle logout
 @app.route('/logout/')
@@ -239,6 +298,31 @@ def logout():
     orderItemCount = 0
     currentOrderID = ""
     return render_template("LoginPage.html")
+
+# Function for updating the order status
+def update_order_status(orderID):
+    # Define the order stages for pizza
+    status_progression = ["Order Placed", "Preparing", "Baking", "Out for Delivery", "Completed"]
+
+    # Loop indefinitely in background
+    while True:
+        # Fetch order if not yet completed
+        order = collectionOrders.find_one({"orderID": orderID, "status": {"$ne": "Completed"}})
+
+        # If the order is not complete, update status periodically
+        if order:
+            current_status = order.get("status", "Order Placed")
+            try:
+                next_status = status_progression[status_progression.index(current_status) + 1]
+            except IndexError:
+                next_status = "Completed"
+
+            # Update the order status
+            collectionOrders.update_one({"_id": order["_id"]}, {"$set": {"status": next_status}})
+            print(f"Order {order['orderID']} status updated to {next_status}")
+
+            # Sleep for a certain period before checking again
+            time.sleep(10)  # Sleep for 10 seconds, to simulate order progression
 
 # Run the app
 if __name__ == "__main__":

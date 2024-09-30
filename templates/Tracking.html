@@ -35,53 +35,9 @@
         </form>
     </div>  
     <script>
-        var progress = document.documentElement;
-        var progressBall = document.documentElement;
+        var progress = document.querySelector('.progress');
+        var progressBall = document.querySelector('.progress-indicator');
         var i = 0;
-
-        function changeProgress() {
-
-            i++;
-
-            switch (i) {
-                case 1:
-                    progress.style.setProperty('--progress', '0%');
-                    progressBall.style.setProperty('--progressBall', '0%');
-                    document.getElementById('orderStatus').innerText = "Your Order has been placed";
-                    break;
-                case 3:
-                    progress.style.setProperty('--progress', '33%');
-                    progressBall.style.setProperty('--progressBall', '33%');
-                    document.getElementById('orderStatus').innerText = "Your Order is being made";
-                    break;
-                case 5:
-                    progress.style.setProperty('--progress', '50%');
-                    progressBall.style.setProperty('--progressBall', '50%');
-                    document.getElementById('orderStatus').innerText = "Your Order is being packaged";
-                    break;
-                case 7:
-                    progress.style.setProperty('--progress', '70%');
-                    progressBall.style.setProperty('--progressBall', '70%');
-                    document.getElementById('orderStatus').innerText = "Your Order is on its way";
-                    break;
-                case 10:
-                    progress.style.setProperty('--progress', '100%');
-                    progressBall.style.setProperty('--progressBall', '100%');
-                    document.getElementById('orderStatus').innerText = "Your Order is ready";
-                    break;
-            }
-
-            // Stop the interval once i reaches 10
-            if (i >= 10) {
-                clearInterval(progressInterval);
-            }
-        }
-
-        // Call the function periodically to simulate progress
-        var progressInterval = setInterval(changeProgress, 5000);  // Update every 5 seconds
-        document.addEventListener("DOMContentLoaded", function () {
-            changeProgress();
-        })
 
         fetch('/getOrder')
             .then(response => response.json())  // Parse the JSON response
@@ -121,7 +77,7 @@
                         } else {
                             if (parameter === 'cost') {
                                 // If the parameter is cost, display it as currency
-                                display.innerHTML += `<strong>${parameter}:</strong> $${value}<br>`;
+                                display.innerHTML += `<strong>${parameter}:</strong> $${value.toFixed(2)}<br>`;
                             } else {
                                 // Otherwise, display the key-value pair directly
                                 display.innerHTML += `<strong>${parameter}:</strong> ${value}<br>`;
@@ -134,9 +90,31 @@
                 //print orderID and totalCost if they exist
                 if (data.totalCost) {
                     //print the totalCost
-                    display.innerHTML += `<strong>Total Cost:</strong> $${data.totalCost}`;
+                    display.innerHTML += `<strong>Total Cost:</strong> $${data.totalCost.toFixed(2)}`;
+                }
+
+                //retreive the order status for the progress bar
+                const orderStatus = data.status;
+                status_progression = ["Order Placed", "Preparing", "Baking", "Out for Delivery", "Completed"];
+                //update the progress bar based on the order status
+                for (let i = 0; i < status_progression.length; i++) {
+                    if (orderStatus == status_progression[i]) {
+                        progress.style.setProperty('--progress', (i * 25) + '%');
+                        progressBall.style.setProperty('--progressBall', (i * 25) + '%');
+                        document.getElementById('orderStatus').innerText = "Your Order is " + orderStatus;
+                    }
                 }
             })
+
+        //refresh the page every 5 seconds to check the progress of the order until it is completed
+        var refreshInterval = setInterval(function () { 
+            if (document.getElementById('orderStatus').innerText.includes("Completed")) {
+                clearInterval(refreshInterval);
+            } 
+            else {
+                location.reload();
+            }
+        }, 5000);
     </script>
 </body>
 

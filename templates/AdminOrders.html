@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styleSheet.css') }}">
+<meta charset="UTF-8">
+<title>Kettering University Pizza Shop Order Overview</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <div class="header">
+    <h1>Kettering University Pizza Shop Order Overview</h1>
+  </div>
+
+  <div class="order-summary-container">
+    <!-- Orders will be inserted here -->
+  </div> 
+
+  <!-- Summary details for orders here -->
+  <div class="container">
+    <h2 id="total-orders"></h2>
+    <br>
+    <h2 id="total-revenue"></h2>
+  </div>
+
+  <div class="button-container"></div>
+    <button class="admin-btn" onclick="window.location.href='/admin';">Return to Admin Overview</button>
+  </div>
+
+  <div class="logout-btn-container">
+    <form action="{{ url_for('logout')}}" onsubmit="return confirm('Are you sure you want to log out?');">
+      <button name="logout" id="logout" type="submit" class="logout-btn">Log Out</button>
+    </form>
+  </div>
+
+  <script>
+    // Set constants for the total orders and total revenue
+    const totalOrders = document.getElementById('total-orders');
+    const totalRevenue = document.getElementById('total-revenue');
+    let revenue = 0;
+
+    // Fetch all orders from the server
+    fetch('/getAllOrders')
+      .then(response => response.json())
+      .then(orders => {
+        const orderSummaryContainer = document.querySelector('.order-summary-container');
+        orderSummaryContainer.innerHTML = ''; // Clear existing orders
+        
+        // Create the table and header row
+        const table = document.createElement('table');
+        table.className = 'order-table';
+        const headerRow = document.createElement('tr');
+        headerRow.innerHTML = `
+          <th>Order ID</th>
+          <th>Price</th>
+          <th>Order Status</th>
+        `;
+        table.appendChild(headerRow);
+
+        // Populate the table with orders
+        orders.forEach(order => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${order.orderID}</td>
+            <td>$${order.totalCost.toFixed(2)}</td>
+            <td>${order.status}</td>
+          `;
+          table.appendChild(row);
+          revenue += order.totalCost; // Update the total revenue when iterating
+        });
+
+        // Append the table to the order summary container
+        orderSummaryContainer.appendChild(table);
+
+        //update the total orders and total revenue
+        totalOrders.innerHTML = `Total Orders: ${orders.length}`;
+        totalRevenue.innerHTML = `Total Revenue: $${revenue.toFixed(2)}`; 
+      })
+      .catch(error => console.error('Error fetching orders:', error));
+  </script>
+</body>
+</html>

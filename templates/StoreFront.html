@@ -120,7 +120,7 @@
                         } else {
                             if (parameter === 'cost') {
                                 // If the parameter is cost, display it as currency
-                                display.innerHTML += `<strong>${parameter}:</strong> $${value}<br>`;
+                                display.innerHTML += `<strong>${parameter}:</strong> $${value.toFixed(2)}<br>`;
                             } else {
                                 // Otherwise, display the key-value pair directly
                                 display.innerHTML += `<strong>${parameter}:</strong> ${value}<br>`;
@@ -135,7 +135,7 @@
                     //print the orderID
                     display.innerHTML += `<strong>Order ID:</strong> ${data.orderID}<br>`;
                     //print the totalCost
-                    display.innerHTML += `<strong>Total Cost:</strong> $${data.totalCost}`;
+                    display.innerHTML += `<strong>Total Cost:</strong> $${data.totalCost.toFixed(2)}`;
                 }
             })
     </script>
